@@ -1,0 +1,120 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!--
+Biotechnology Manufacturing Markup Language (BiotechMML) version 0.1 material instance schema
+Website: http://www.saorstat.com/data_standard/BiotechMML
+Version History: http://www.saorstat.com/data_standard/BiotechMML/schema_changes.txt
+
+Copyright © 2013-2014 Saorstat Limited
+
+BiotechMML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public Licence as published by
+the Free Software Foundation, either version 3 of the Licence, or
+(at your option) any later version.
+
+BiotechMML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public Licence for more details.
+
+You should have received a copy of the GNU General Public Licence
+along with this schema.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<xsd:schema
+	xmlns="http://www.saorstat.com/data_standard/BiotechMML/v0.1"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wipo="http://www.wipo.int/standards/XMLSchema/Common/1"
+	targetNamespace="http://www.saorstat.com/data_standard/BiotechMML/v0.1"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.wipo.int/standards/XMLSchema/Common/1" schemaLocation="http://www.wipo.int/standards/XMLSchema/Common/1/Basic/ISOCountryCodeType-V1-0.xsd"/>
+
+	<xsd:include schemaLocation="http://www.saorstat.com/data_standard/BiotechMML/v0.1/xsd/common.xsd"/>
+
+	<!--  
+        +===========================================================================+
+        | element type definitions                                                  |
+        +===========================================================================+
+	-->
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-MaterialInstance">
+		<xsd:sequence>
+			<xsd:element name="MaterialInstanceGeneralVariables" type="BiotechMMLcomplexTypeDefinition-MaterialInstanceGeneralVariables" minOccurs="0"/>
+			<xsd:element name="MaterialDefinitionRef" type="BiotechMMLcomplexTypeDefinition-MaterialDefinitionRef"/>
+			<xsd:element name="ManufactureInputs" type="BiotechMMLcomplexTypeDefinition-ManufactureInputs" minOccurs="0"/>
+			<xsd:element name="Storage" type="BiotechMMLcomplexTypeDefinition-FacilitiesPeriods" minOccurs="0"/>
+			<xsd:element name="Characterisation" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="CharacterisationInstance" type="BiotechMMLcomplexTypeDefinition-CharacterisationInstance" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="MaterialInstanceAttributeDefinition"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-ManufactureInputs">
+		<xsd:sequence>
+			<xsd:element name="InputMaterialInstance" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="InputMaterialInstanceRef" type="BiotechMMLcomplexTypeDefinition-MaterialInstanceRef"/>
+						<xsd:element name="Quantity" type="xsd:double" minOccurs="0"/>
+						<xsd:element name="Unit" type="xsd:anyURI" minOccurs="0"/>
+						<xsd:element name="DateTimeConsumed" type="xsd:dateTime" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FacilityInstance" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="FacilityInstanceRef" type="BiotechMMLcomplexTypeDefinition-FacilityInstanceRef"/>
+						<xsd:element name="Period" type="BiotechMMLcomplexTypeDefinition-Period" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-MaterialInstanceGeneralVariables">
+		<xsd:sequence>
+			<xsd:element name="MaterialInstanceName" type="xsd:string"/>
+			<xsd:element name="MaterialInstanceAlias" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="MaterialInstanceDescription" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:simpleType name="BiotechMMLsimpleTypeDefinition-MaterialType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="drug substance"/>
+			<xsd:enumeration value="drug product"/>
+			<xsd:enumeration value="process intermediate"/>
+			<xsd:enumeration value="reagent"/>
+			<xsd:enumeration value="reference standard"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="BiotechMMLsimpleTypeDefinition-MaterialFormation">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="generation"/>
+			<xsd:enumeration value="aggregation"/>
+			<xsd:enumeration value="subset"/>
+			<xsd:enumeration value="environmental"/>
+			<xsd:enumeration value="sample"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!--  
+        +===========================================================================+
+        | attribute definition groups                                               |
+        +===========================================================================+
+	-->
+
+	<xsd:attributeGroup name="MaterialInstanceAttributeDefinition">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+		<xsd:attribute name="formation" type="BiotechMMLsimpleTypeDefinition-MaterialFormation" use="required"/>
+		<xsd:attribute name="type" type="BiotechMMLsimpleTypeDefinition-MaterialType" use="optional"/>
+	</xsd:attributeGroup>
+
+</xsd:schema>

@@ -1,0 +1,145 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!--
+Biotechnology Manufacturing Markup Language (BiotechMML) version 0.1 test method definition schema
+Website: http://www.saorstat.com/data_standard/BiotechMML
+Version History: http://www.saorstat.com/data_standard/BiotechMML/schema_changes.txt
+
+Copyright © 2013-2014 Saorstat Limited
+
+BiotechMML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public Licence as published by
+the Free Software Foundation, either version 3 of the Licence, or
+(at your option) any later version.
+
+BiotechMML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public Licence for more details.
+
+You should have received a copy of the GNU General Public Licence
+along with this schema.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<xsd:schema
+	xmlns="http://www.saorstat.com/data_standard/BiotechMML/v0.1"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wipo="http://www.wipo.int/standards/XMLSchema/Common/1"
+	targetNamespace="http://www.saorstat.com/data_standard/BiotechMML/v0.1"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.wipo.int/standards/XMLSchema/Common/1" schemaLocation="http://www.wipo.int/standards/XMLSchema/Common/1/Basic/ISOCountryCodeType-V1-0.xsd"/>
+
+	<xsd:include schemaLocation="http://www.saorstat.com/data_standard/BiotechMML/v0.1/xsd/common.xsd"/>
+
+	<!--  
+        +===========================================================================+
+        | element type definitions                                                  |
+        +===========================================================================+
+	-->
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-TestMethodDefinition">
+		<xsd:sequence>
+			<xsd:element name="TestMethodDefinitionGeneralVariables" type="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionGeneralVariables"/>
+			<xsd:element name="TestMethodDefinitionMetaDataVersion" type="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionMetaDataVersion" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="TestMethodDefinitionAttributeDefinition"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionGeneralVariables">
+		<xsd:sequence>
+			<xsd:element name="TestMethodName" type="xsd:string"/>
+			<xsd:element name="TestMethodDescription" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionMetaDataVersion" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="TestMaterial" type="BiotechMMLcomplexTypeDefinition-MaterialDefinitionRef" maxOccurs="unbounded"/>
+			<xsd:element name="ReferenceMaterial" type="BiotechMMLcomplexTypeDefinition-MaterialDefinitionRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="ControlMaterial" type="BiotechMMLcomplexTypeDefinition-MaterialDefinitionRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="FacilityRef" type="BiotechMMLcomplexTypeDefinition-FacilityDefinitionRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Receipe" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="TestMethodDefinitionMetaDataVersionAttributeDefinition"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QuantitativeTestMethodDefinitionMetaDataVersion">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionMetaDataVersion">
+				<xsd:sequence>
+					<xsd:element name="Component" type="BiotechMMLcomplexTypeDefinition-QuantitativeComponentDefinition" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-ComponentDefinition" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="ComponentName" type="xsd:string"/>
+			<xsd:element name="ComponentDescription" type="xsd:string"/>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="ComponentAttributeDefinition"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QuantitativeComponentDefinition">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-ComponentDefinition">
+				<xsd:sequence>
+					<xsd:choice>
+						<xsd:element name="Component" type="BiotechMMLcomplexTypeDefinition-QuantitativeComponentDefinition" maxOccurs="unbounded"/>
+						<xsd:group ref="BiotechMMLgroupDefinition-QuantitativeComponentGroup"/>
+					</xsd:choice>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:group name="BiotechMMLgroupDefinition-QuantitativeComponentGroup">
+		<xsd:sequence>
+			<xsd:element name="TestMaterialUnits" type="xsd:anyURI" minOccurs="0"/>
+			<xsd:element name="ReferenceUnits" type="xsd:anyURI" minOccurs="0"/>
+			<xsd:element name="ControlUnits" type="xsd:anyURI" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:group>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QualitativeTestMethodDefinitionMetaDataVersion">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionMetaDataVersion">
+				<xsd:sequence>
+					<xsd:element name="Component" type="BiotechMMLcomplexTypeDefinition-QualitativeComponentDefinition" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QualitativeComponentDefinition">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-ComponentDefinition">
+				<xsd:sequence>
+					<xsd:element name="Component" type="BiotechMMLcomplexTypeDefinition-QualitativeComponentDefinition" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<!--  
+        +===========================================================================+
+        | attribute definition groups                                               |
+        +===========================================================================+
+	-->
+
+	<xsd:attributeGroup name="TestMethodDefinitionAttributeDefinition">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+	</xsd:attributeGroup>
+
+	<xsd:attributeGroup name="TestMethodDefinitionMetaDataVersionAttributeDefinition">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+		<xsd:attribute name="description" type="xsd:string" use="optional"/>
+	</xsd:attributeGroup>
+
+	<xsd:attributeGroup name="ComponentAttributeDefinition">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+		<xsd:attribute name="order" type="xsd:positiveInteger" use="optional"/>
+	</xsd:attributeGroup>
+
+</xsd:schema>

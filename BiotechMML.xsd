@@ -1,0 +1,273 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!--
+Biotechnology Manufacturing Markup Language (BiotechMML) version 0.1 top-level schema
+Website: http://www.saorstat.com/data_standard/BiotechMML
+Version History: http://www.saorstat.com/data_standard/BiotechMML/schema_changes.txt
+
+Copyright © 2013-2014 Saorstat Limited
+
+BiotechMML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public Licence as published by
+the Free Software Foundation, either version 3 of the Licence, or
+(at your option) any later version.
+
+BiotechMML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public Licence for more details.
+
+You should have received a copy of the GNU General Public Licence
+along with this schema.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<xsd:schema
+	xmlns:b="http://www.saorstat.com/data_standard/BiotechMML/v0.1"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:units="urn:oasis:names:tc:unitsml:schema:xsd:UnitsMLSchema-1.0"
+	targetNamespace="http://www.saorstat.com/data_standard/BiotechMML/v0.1"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xsd:import namespace="urn:oasis:names:tc:unitsml:schema:xsd:UnitsMLSchema-1.0" schemaLocation="http://unitsml.nist.gov/Schema/UnitsML-v1.0-csd04.xsd"/>
+
+	<xsd:include schemaLocation="http://www.saorstat.com/data_standard/BiotechMML/v0.1/xsd/MaterialDefinition.xsd"/>
+	<xsd:include schemaLocation="http://www.saorstat.com/data_standard/BiotechMML/v0.1/xsd/MaterialInstance.xsd"/>
+
+	<xsd:include schemaLocation="http://www.saorstat.com/data_standard/BiotechMML/v0.1/xsd/FacilityDefinition.xsd"/>
+	<xsd:include schemaLocation="http://www.saorstat.com/data_standard/BiotechMML/v0.1/xsd/FacilityInstance.xsd"/>
+
+	<xsd:include schemaLocation="http://www.saorstat.com/data_standard/BiotechMML/v0.1/xsd/TestMethodDefinition.xsd"/>
+	<xsd:include schemaLocation="http://www.saorstat.com/data_standard/BiotechMML/v0.1/xsd/TestMethodInstance.xsd"/>
+
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+			Define the top-level element of the schema.
+		</xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:element name="BiotechMML">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="MaterialDefinition" type="b:BiotechMMLcomplexTypeDefinition-MaterialDefinition" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="FacilityDefinition" type="b:BiotechMMLcomplexTypeDefinition-FacilityDefinition" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="TestMethodDefinition" type="b:BiotechMMLcomplexTypeDefinition-TestMethodDefinition" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="MaterialInstance" type="b:BiotechMMLcomplexTypeDefinition-MaterialInstance" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="FacilityInstance" type="b:BiotechMMLcomplexTypeDefinition-FacilityInstance" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="TestMethodInstance" type="b:BiotechMMLcomplexTypeDefinition-TestMethodInstance" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element ref="units:UnitSet" minOccurs="0"/>
+			</xsd:sequence>
+			<xsd:attributeGroup ref="b:BiotechMMLAttributeDefinition"/>
+		</xsd:complexType>
+
+		<xsd:unique name="material_definition_key_0001">
+			<xsd:selector xpath="./b:MaterialDefinition"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+
+		<xsd:key name="material_definition_key_0002">
+			<xsd:selector xpath="./b:MaterialDefinition"/>
+			<xsd:field xpath="@id"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersion/@id"/>
+		</xsd:key>
+
+		<xsd:unique name="material_definition_key_0003">
+			<xsd:selector xpath="./b:MaterialDefinition"/>
+			<xsd:field xpath="@id"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersion/@id"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersion/Properties/b:Property/@id"/>
+		</xsd:unique>
+
+
+		<xsd:key name="material_definition_key_0004">
+			<xsd:selector xpath="./b:MaterialDefinition"/>
+			<xsd:field xpath="@id"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersion/@id"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersion/b:Characterisation/b:AttributeDefinition/@id"/>
+		</xsd:key>
+
+		<xsd:keyref name="material_definition_keyref_0001" refer="b:material_definition_key_0002">
+			<xsd:selector xpath="b:MaterialDefinitionMetaDataVersion/b:Receipe/b:InputMaterial/b:MaterialRef"/>
+			<xsd:field xpath="b:MaterialDefinitionID"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersionID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="material_definition_keyref_0002" refer="b:test_method_definition_key_0003">
+			<xsd:selector xpath="b:MaterialDefinitionMetaDataVersion/b:Characterisation/b:AttributeDefinition/b:TestMethodComponentRef"/>
+			<xsd:field xpath="b:TestMethodDefinitionRef/b:TestMethodDefinitionID"/>
+			<xsd:field xpath="b:TestMethodDefinitionRef/b:TestMethodDefinitionMetaDataVersionID"/>
+			<xsd:field xpath="b:ComponentID"/>
+		</xsd:keyref>
+
+		<xsd:unique name="facility_definition_key_0001">
+			<xsd:selector xpath="./b:FacilityDefinition"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+
+		<xsd:key name="facility_definition_key_0002">
+			<xsd:selector xpath="./b:FacilityDefinition"/>
+			<xsd:field xpath="@id"/>
+			<xsd:field xpath="b:FacilityDefinitionMetaDataVersion/@id"/>
+		</xsd:key>
+
+		<xsd:unique name="facility_definition_key_0003">
+			<xsd:selector xpath="./b:FacilityDefinition"/>
+			<xsd:field xpath="@id"/>
+			<xsd:field xpath="b:FacilityDefinitionMetaDataVersion/@id"/>
+			<xsd:field xpath="b:FacilityDefinitionMetaDataVersion/b:Properties/b:Property/@id"/>
+		</xsd:unique>
+
+		<xsd:unique name="facility_definition_key_0005">
+			<xsd:selector xpath="./b:FacilityDefinition"/>
+			<xsd:field xpath="@id"/>
+			<xsd:field xpath="b:FacilityDefinitionMetaDataVersion/@id"/>
+			<xsd:field xpath="b:FacilityDefinitionMetaDataVersion/b:Characterisation/b:AttributeDefinition/@id"/>
+		</xsd:unique>
+
+		<xsd:keyref name="facility_definition_keyref_0001" refer="b:test_method_definition_key_0003">
+			<xsd:selector xpath="b:FacilityDefinitionMetaDataVersion/b:Characterisation/b:AttributeDefinition/b:TestMethodComponentRef"/>
+			<xsd:field xpath="b:TestMethodDefinitionRef/b:TestMethodDefinitionID"/>
+			<xsd:field xpath="b:TestMethodDefinitionRef/b:TestMethodDefinitionMetaDataVersionID"/>
+			<xsd:field xpath="b:ComponentID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="facility_definition_keyref_0002" refer="b:facility_definition_key_0002">
+			<xsd:selector xpath="./b:FacilityDefinition/b:FacilityDefinitionMetaDataVersion/b:CollaboratingFacilityDefinitionRef"/>
+			<xsd:field xpath="b:FacilityDefinitionID"/>
+			<xsd:field xpath="b:FacilityDefinitionMetaDataVersionID"/>
+		</xsd:keyref>
+
+		<xsd:unique name="test_method_definition_key_0001">
+			<xsd:selector xpath="./b:TestMethodDefinition"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+
+		<xsd:key name="test_method_definition_key_0002">
+			<xsd:selector xpath="./b:TestMethodDefinition"/>
+			<xsd:field xpath="@id"/>
+			<xsd:field xpath="b:TestMethodDefinitionMetaDataVersion/@id"/>
+		</xsd:key>
+
+		<xsd:key name="test_method_definition_key_0003">
+			<xsd:selector xpath="./b:TestMethodDefinition"/>
+			<xsd:field xpath="@id"/>
+			<xsd:field xpath="b:TestMethodDefinitionMetaDataVersion/@id"/>
+			<xsd:field xpath="b:TestMethodDefinitionMetaDataVersion/Component/@id"/>
+		</xsd:key>
+
+		<xsd:keyref name="test_method_definition_keyref_0001" refer="b:material_definition_key_0002">
+			<xsd:selector xpath="./b:TestMethodDefinition/b:TestMethodDefinitionMetaDataVersion/b:TestMaterial"/>
+			<xsd:field xpath="b:MaterialDefinitionID"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersionID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="test_method_definition_keyref_0002" refer="b:material_definition_key_0002">
+			<xsd:selector xpath="./b:TestMethodDefinition/b:TestMethodDefinitionMetaDataVersion/b:ReferenceMaterial"/>
+			<xsd:field xpath="b:MaterialDefinitionID"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersionID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="test_method_definition_keyref_0003" refer="b:material_definition_key_0002">
+			<xsd:selector xpath="./b:TestMethodDefinition/b:TestMethodDefinitionMetaDataVersion/b:ControlMaterial"/>
+			<xsd:field xpath="b:MaterialDefinitionID"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersionID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="test_method_definition_keyref_0004" refer="b:facility_definition_key_0002">
+			<xsd:selector xpath="./b:TestMethodDefinition/b:TestMethodDefinitionMetaDataVersion/b:FacilityRef"/>
+			<xsd:field xpath="b:FacilityDefinitionID"/>
+			<xsd:field xpath="b:FacilityDefinitionMetaDataVersionID"/>
+		</xsd:keyref>
+
+		<xsd:key name="material_instance_key_0001">
+			<xsd:selector xpath="./b:MaterialInstance"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+
+		<xsd:keyref name="material_instance_keyref_0001" refer="b:material_definition_key_0002">
+			<xsd:selector xpath="./b:MaterialInstance/b:MaterialDefinitionRef"/>
+			<xsd:field xpath="b:MaterialDefinitionID"/>
+			<xsd:field xpath="b:MaterialDefinitionMetaDataVersionID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="material_instance_keyref_0002" refer="b:material_instance_key_0001">
+			<xsd:selector xpath="./b:MaterialInstance/b:ManufactureInputs/b:InputMaterialInstance/b:InputMaterialInstanceRef"/>
+			<xsd:field xpath="b:MaterialInstanceID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="material_instance_keyref_0003" refer="b:facility_instance_key_0001">
+			<xsd:selector xpath="./b:MaterialInstance/b:ManufactureInputs/b:FacilityInstance/b:FacilityInstanceRef"/>
+			<xsd:field xpath="b:FacilityInstanceID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="material_instance_keyref_0004" refer="b:facility_instance_key_0001">
+			<xsd:selector xpath="./b:MaterialInstance/b:Storage/b:FacilityInstance/b:FacilityInstanceRef"/>
+			<xsd:field xpath="b:FacilityInstanceID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="material_instance_keyref_0005" refer="b:test_method_instance_key_0001">
+			<xsd:selector xpath="./b:MaterialInstance/b:Characterisation/b:CharacterisationInstance/b:TestMethodInstanceRef"/>
+			<xsd:field xpath="b:TestMethodInstanceID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="material_instance_keyref_0006" refer="b:material_definition_key_0004">
+			<xsd:selector xpath="./b:MaterialInstance/b:Characterisation/b:CharacterisationInstance/b:AttributeRef"/>
+			<xsd:field xpath="b:DefinitionID"/>
+			<xsd:field xpath="b:DefinitionMetaDataVersionID"/>
+			<xsd:field xpath="b:AttributeID"/>
+		</xsd:keyref>
+
+		<xsd:key name="facility_instance_key_0001">
+			<xsd:selector xpath="./b:FacilityInstance"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+
+		<xsd:keyref name="facility_instance_keyref_0001" refer="b:facility_definition_key_0002">
+			<xsd:selector xpath="./b:FacilityInstance/b:FacilityDefinitionRef"/>
+			<xsd:field xpath="b:FacilityDefinitionID"/>
+			<xsd:field xpath="b:FacilityDefinitionMetaDataVersionID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="facility_instance_keyref_0002" refer="b:facility_instance_key_0001">
+			<xsd:selector xpath="./b:FacilityInstance/b:CollaboratingFacilitiesInstances/b:FacilityInstance/b:FacilityInstanceRef"/>
+			<xsd:field xpath="b:FacilityInstanceID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="facility_instance_keyref_0003" refer="b:test_method_instance_key_0001">
+			<xsd:selector xpath="./b:FacilityInstance/b:Characterisation/b:CharacterisationInstance/b:TestMethodInstanceRef"/>
+			<xsd:field xpath="b:TestMethodInstanceID"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="facility_instance_keyref_0004" refer="b:material_definition_key_0004">
+			<xsd:selector xpath="./b:FacilityInstance/b:Characterisation/b:CharacterisationInstance/b:AttributeRef"/>
+			<xsd:field xpath="b:DefinitionID"/>
+			<xsd:field xpath="b:DefinitionMetaDataVersionID"/>
+			<xsd:field xpath="b:AttributeID"/>
+		</xsd:keyref>
+
+		<xsd:key name="test_method_instance_key_0001">
+			<xsd:selector xpath="./b:TestMethodInstance"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+
+		<xsd:keyref name="test_method_instance_keyref_0001" refer="b:test_method_definition_key_0002">
+			<xsd:selector xpath="./b:TestMethodInstance/b:TestMethodDefinitionRef"/>
+			<xsd:field xpath="b:TestMethodDefinitionID"/>
+			<xsd:field xpath="b:TestMethodDefinitionMetaDataVersionID"/>
+		</xsd:keyref>
+
+	</xsd:element>
+
+	<xsd:attributeGroup name="BiotechMMLAttributeDefinition">
+		<xsd:attribute name="id" type="xsd:string"/>
+		<xsd:attribute name="Description" type="xsd:string" use="optional"/>
+		<xsd:attribute name="CreationDateTime" type="xsd:dateTime" use="optional"/>
+		<xsd:attribute name="AsOfDateTime" type="xsd:dateTime" use="optional"/>
+		<xsd:attribute name="BiotechMMLVersion" type="b:BiotechMMLsimpleTypeDefinition-BiotechMMLVersionType" use="optional"/>
+		<xsd:attribute name="Originator" type="xsd:string" use="optional"/>
+	</xsd:attributeGroup>
+
+	<xsd:simpleType name="BiotechMMLsimpleTypeDefinition-BiotechMMLVersionType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0.1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

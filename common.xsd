@@ -1,0 +1,330 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!--
+Biotechnology Manufacturing Markup Language (BiotechMML) version 0.1 common definitions schema
+Website: http://www.saorstat.com/data_standard/BiotechMML
+Version History: http://www.saorstat.com/data_standard/BiotechMML/schema_changes.txt
+
+Copyright © 2013-2014 Saorstat Limited
+
+BiotechMML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public Licence as published by
+the Free Software Foundation, either version 3 of the Licence, or
+(at your option) any later version.
+
+BiotechMML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public Licence for more details.
+
+You should have received a copy of the GNU General Public Licence
+along with this schema.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<xsd:schema
+	xmlns="http://www.saorstat.com/data_standard/BiotechMML/v0.1"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wipo="http://www.wipo.int/standards/XMLSchema/Common/1"
+	targetNamespace="http://www.saorstat.com/data_standard/BiotechMML/v0.1"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.wipo.int/standards/XMLSchema/Common/1" schemaLocation="http://www.wipo.int/standards/XMLSchema/Common/1/Basic/ISOCountryCodeType-V1-0.xsd"/>
+
+	<!--  
+        +===========================================================================+
+        | element type definitions                                                  |
+        +===========================================================================+
+	-->
+
+<!-- Start of Property Types -->
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-Properties">
+		<xsd:sequence>
+			<xsd:element name="Property" type="BiotechMMLcomplexTypeDefinition-Property" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-Property" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="Name" type="xsd:string"/>
+			<xsd:element name="Description" type="xsd:string"/>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="PropertyOrAttributeDefinition"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QuantitativeProperty">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-Property">
+				<xsd:sequence>
+					<xsd:choice>
+						<xsd:group ref="BiotechMMLgroupDefinition-PropertyGroup"/>
+						<xsd:element name="Property" type="BiotechMMLcomplexTypeDefinition-QuantitativeProperty" maxOccurs="unbounded"/>
+					</xsd:choice>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:group name="BiotechMMLgroupDefinition-PropertyGroup">
+		<xsd:sequence>
+			<xsd:element name="Value" type="BiotechMMLcomplexTypeDefinition-Value"/>
+			<xsd:element name="Unit" type="xsd:anyURI" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:group>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QualitativeProperty">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-Property">
+				<xsd:sequence>
+					<xsd:choice>
+						<xsd:element name="Value" type="xsd:string"/>
+						<xsd:element name="Property" type="BiotechMMLcomplexTypeDefinition-QualitativeProperty" maxOccurs="unbounded"/>
+					</xsd:choice>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+<!-- End of Property Types -->
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-CharacterisationDefinition">
+		<xsd:sequence>
+			<xsd:element name="AttributeDefinition" type="BiotechMMLcomplexTypeDefinition-AttributeDefinition" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-AttributeDefinition">
+		<xsd:sequence>
+			<xsd:element name="Name" type="xsd:string"/>
+			<xsd:element name="Description" type="xsd:string"/>
+			<xsd:choice>
+				<xsd:element name="AttributeDefinition" type="BiotechMMLcomplexTypeDefinition-AttributeDefinition" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:group ref="BiotechMMLgroupDefinition-AttributeGroup"/>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="PropertyOrAttributeDefinition"/>
+	</xsd:complexType>
+
+	<xsd:group name="BiotechMMLgroupDefinition-AttributeGroup">
+		<xsd:sequence>
+			<xsd:element name="TestMethodComponentRef" type="BiotechMMLcomplexTypeDefinition-TestMethodComponentRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Specification" type="BiotechMMLcomplexTypeDefinition-Specification" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:group>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-Specification" abstract="true">
+		<xsd:attributeGroup ref="SpecificationAttributeDefinition"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QuantitativeSpecification">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-Specification">
+				<xsd:sequence>
+					<xsd:element name="Lower" type="BiotechMMLcomplexTypeDefinition-QuantitativeSpecificationBound" minOccurs="0"/>
+					<xsd:element name="Upper" type="BiotechMMLcomplexTypeDefinition-QuantitativeSpecificationBound" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QualitativeSpecification">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-Specification">
+				<xsd:sequence>
+					<xsd:element name="WithinSpecification" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="OutsideSpecification" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QuantitativeSpecificationBound">
+		<xsd:sequence>
+			<xsd:element name="Bound">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:double">
+							<xsd:attribute name="boundInclusive" type="xsd:boolean" use="required"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Unit" type="xsd:anyURI" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-MaterialDefinitionRef">
+		<xsd:sequence>
+			<xsd:element name="MaterialDefinitionID" type="xsd:string"/>
+			<xsd:element name="MaterialDefinitionMetaDataVersionID" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-FacilityDefinitionRef">
+		<xsd:sequence>
+			<xsd:element name="FacilityDefinitionID" type="xsd:string"/>
+			<xsd:element name="FacilityDefinitionMetaDataVersionID" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionRef">
+		<xsd:sequence>
+			<xsd:element name="TestMethodDefinitionID" type="xsd:string"/>
+			<xsd:element name="TestMethodDefinitionMetaDataVersionID" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-MaterialInstanceRef">
+		<xsd:sequence>
+			<xsd:element name="MaterialInstanceID" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-FacilityInstanceRef">
+		<xsd:sequence>
+			<xsd:element name="FacilityInstanceID" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-TestMethodInstanceRef">
+		<xsd:sequence>
+			<xsd:element name="TestMethodInstanceID" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-AttributeRef">
+		<xsd:sequence>
+			<xsd:element name="DefinitionID" type="xsd:string" maxOccurs="unbounded"/>
+			<xsd:element name="DefinitionMetaDataVersionID" type="xsd:string" maxOccurs="unbounded"/>
+			<xsd:element name="AttributeID" type="xsd:string" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-TestMethodComponentRef">
+		<xsd:sequence>
+			<xsd:element name="TestMethodDefinitionRef" type="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionRef"/>
+			<xsd:element name="ComponentID" type="xsd:string" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+        <xsd:complexType name="BiotechMMLcomplexTypeDefinition-Period">
+                <xsd:sequence>
+                        <xsd:element name="StartDateTime" minOccurs="0" nillable="true">
+                                <xsd:complexType>
+                                        <xsd:simpleContent>
+                                                <xsd:extension base="xsd:dateTime">
+                                                        <xsd:attribute name="leftCensored" type="xsd:boolean" default="false"/>
+                                                </xsd:extension>
+                                        </xsd:simpleContent>
+                                </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="EndDateTime" minOccurs="0" nillable="true">
+                                <xsd:complexType>
+                                        <xsd:simpleContent>
+                                                <xsd:extension base="xsd:dateTime">
+                                                        <xsd:attribute name="rightCensored" type="xsd:boolean" default="false"/>
+                                                </xsd:extension>
+                                        </xsd:simpleContent>
+                                </xsd:complexType>
+                        </xsd:element>
+                </xsd:sequence>
+        </xsd:complexType>
+
+        <xsd:complexType name="BiotechMMLcomplexTypeDefinition-CharacterisationInstance" abstract="true">
+		<xsd:group ref="BiotechMMLgroupDefinition-CharacterisationInstanceGroup" minOccurs="0"/>
+        </xsd:complexType>
+
+	<xsd:group name="BiotechMMLgroupDefinition-CharacterisationInstanceGroup">
+		<xsd:sequence>
+			<xsd:element name="TestMethodInstanceRef" type="BiotechMMLcomplexTypeDefinition-TestMethodInstanceRef"/>
+			<xsd:element name="AttributeRef" type="BiotechMMLcomplexTypeDefinition-AttributeRef"/>
+		</xsd:sequence>
+	</xsd:group>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QuantitativeCharacterisationInstance">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-CharacterisationInstance">
+				<xsd:sequence>
+					<xsd:element name="Value" type="BiotechMMLcomplexTypeDefinition-Value" nillable="true" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+        <xsd:complexType name="BiotechMMLcomplexTypeDefinition-Value">
+                <xsd:sequence>
+                        <xsd:choice>
+                                <xsd:element name="Point" type="xsd:double"/>
+                                <xsd:group ref="Bounds"/>
+                        </xsd:choice>
+                </xsd:sequence>         
+        </xsd:complexType>                      
+
+        <xsd:group name="Bounds">
+                <xsd:sequence>
+                        <xsd:element name="LowerBound" minOccurs="0" nillable="true">
+                                <xsd:complexType>
+                                        <xsd:simpleContent>
+                                                <xsd:extension base="xsd:double">
+                                                        <xsd:attribute name="inclusive" type="xsd:boolean" use="required"/>
+                                                </xsd:extension>
+                                        </xsd:simpleContent>
+                                </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="UpperBound" minOccurs="0" nillable="true">
+                                <xsd:complexType>
+                                        <xsd:simpleContent>
+                                                <xsd:extension base="xsd:double">
+                                                        <xsd:attribute name="inclusive" type="xsd:boolean" use="required"/>
+                                                </xsd:extension>
+                                        </xsd:simpleContent>
+                                </xsd:complexType>
+                        </xsd:element>
+                </xsd:sequence>
+        </xsd:group>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-QualitativeCharacterisationInstance">
+		<xsd:complexContent>
+			<xsd:extension base="BiotechMMLcomplexTypeDefinition-CharacterisationInstance">
+				<xsd:sequence>
+					<xsd:element name="Value" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-FacilitiesPeriods">
+		<xsd:sequence>
+			<xsd:element name="FacilityInstance" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="FacilityInstanceRef" type="BiotechMMLcomplexTypeDefinition-FacilityInstanceRef"/>
+						<xsd:element name="Period" type="BiotechMMLcomplexTypeDefinition-Period" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!--  
+        +===========================================================================+
+        | attribute definition groups                                               |
+        +===========================================================================+
+	-->
+
+	<xsd:attributeGroup name="PropertyOrAttributeDefinition">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+		<xsd:attribute name="order" type="xsd:positiveInteger" use="optional"/>
+	</xsd:attributeGroup>
+
+	<xsd:attributeGroup name="SpecificationAttributeDefinition">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+		<xsd:attribute name="country" use="optional">
+			<xsd:simpleType>
+				<xsd:list itemType="wipo:ISOCountryCodeType"/>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="startTime" type="xsd:dateTime" use="optional"/>
+		<xsd:attribute name="endTime" type="xsd:dateTime" use="optional"/>
+	</xsd:attributeGroup>
+
+</xsd:schema>
