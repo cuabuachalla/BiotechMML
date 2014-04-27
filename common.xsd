@@ -154,21 +154,18 @@ along with this schema.  If not, see <http://www.gnu.org/licenses/>.
 
 	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-MaterialDefinitionRef">
 		<xsd:sequence>
-			<xsd:element name="MaterialDefinitionID" type="xsd:string"/>
 			<xsd:element name="MaterialDefinitionMetaDataVersionID" type="xsd:string"/>
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-FacilityDefinitionRef">
 		<xsd:sequence>
-			<xsd:element name="FacilityDefinitionID" type="xsd:string"/>
 			<xsd:element name="FacilityDefinitionMetaDataVersionID" type="xsd:string"/>
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionRef">
 		<xsd:sequence>
-			<xsd:element name="TestMethodDefinitionID" type="xsd:string"/>
 			<xsd:element name="TestMethodDefinitionMetaDataVersionID" type="xsd:string"/>
 		</xsd:sequence>
 	</xsd:complexType>
@@ -193,15 +190,12 @@ along with this schema.  If not, see <http://www.gnu.org/licenses/>.
 
 	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-AttributeRef">
 		<xsd:sequence>
-			<xsd:element name="DefinitionID" type="xsd:string" maxOccurs="unbounded"/>
-			<xsd:element name="DefinitionMetaDataVersionID" type="xsd:string" maxOccurs="unbounded"/>
 			<xsd:element name="AttributeID" type="xsd:string" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="BiotechMMLcomplexTypeDefinition-TestMethodComponentRef">
 		<xsd:sequence>
-			<xsd:element name="TestMethodDefinitionRef" type="BiotechMMLcomplexTypeDefinition-TestMethodDefinitionRef"/>
 			<xsd:element name="ComponentID" type="xsd:string" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
